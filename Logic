@@ -17,3 +17,10 @@ number of iterations for y axis
     iterate through to create a list
     return list
 
+add central long to each coordinate of x axis
+    loop through results of seq for x axis
+    return appended list from loop
+
+add central_lat to each coordinate of y axis
+    loop through results of seq for y axis
+    return appended list from loop
