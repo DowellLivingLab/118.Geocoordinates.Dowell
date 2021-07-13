@@ -17,10 +17,17 @@ number of iterations for y axis
     iterate through to create a list
     return list
 
-add central long to each coordinate of x axis
+add central_long to each coordinate of x axis
     loop through results of seq for x axis
     return appended list from loop
 
 add central_lat to each coordinate of y axis
     loop through results of seq for y axis
     return appended list from loop
+
+dataframe
+    create dataframe with columns as appended list from loop (central_long) and index as appended list from loop (central_lat)
+    replace null values with empty string
+    perform value placing
+    get the odd and even indexing values for both longitude and latitude
+    value place the odd and even columns for both longitude and latitude
