@@ -31,3 +31,5 @@ dataframe
     perform value placing
     get the odd and even indexing values for both longitude and latitude
     value place the odd and even columns for both longitude and latitude
+    convert a copy of the dataframe to an array
+    store the array elements in a list where the results from seq of x axis is not empty
