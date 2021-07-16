@@ -7,6 +7,14 @@ set defaults to be used throughout the script
 user to input length, width, N which is the total number of circles inscribed in the rectangle, radius as radi, central_lat, central_long, x, y
 calculate the area, area of circle, radius, diameter, hyp, heigh from user input
 
+area_of_circle = area/N
+radius = math.sqrt(area_of_circle/3.142)
+diameter = 2 * radius
+
+hyp = 2 * radi
+heigh = radi * squareroot(3)
+round heigh to the nearest 10
+
 number of iterations for x axis
     create seq function with parameters start, iteration and step
     iterate through to create a list
