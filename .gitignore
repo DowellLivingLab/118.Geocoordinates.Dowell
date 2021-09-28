@@ -1,3 +1,4 @@
 .ipynb_checkpoints/
 Updated_file_geoloc4.ipynb
-*__pycache__
+*/__pycache__/
+test.csv
