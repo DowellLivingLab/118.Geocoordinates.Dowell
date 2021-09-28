@@ -1,16 +1,28 @@
+from django.http import HttpResponse
 from django.shortcuts import render
 
 # Create your views here.
-def find_shape_centre(coordinates):
+def find_shape_area(area):
+    shape_area = area/2
+    return shape_area
 
-    coordinates = sorted(coordinates, key=lambda x: x[1])
-
+def split_coordinates(coordinates):
     x_coordinates = list()
     y_coordinates = list()
 
     for coordinate in coordinates:
         x_coordinates.append(coordinate[0])
         y_coordinates.append(coordinate[1])
+
+    return x_coordinates, y_coordinates
+
+def find_shape_centre(request, coordinates=[(2.66, 4.71), (5, 3.5), (3.63, 2.52), 
+                    (4, 1.6), (1.9, 1), (0.72, 2.28)]):
+
+    coordinates = sorted(coordinates, key=lambda x: x[1])
+
+    x_coordinates = split_coordinates(coordinates)[0]
+    y_coordinates = split_coordinates(coordinates)[1]
 
     shape_area = 0
 
@@ -33,7 +45,7 @@ def find_shape_centre(coordinates):
 
         i+=1
 
-    shape_area = shape_area/2
+    shape_area = find_shape_area(shape_area)
 
     centroid_x_coordinate = 0
     centroid_y_coordinate = 0
@@ -62,9 +74,4 @@ def find_shape_centre(coordinates):
 
     centre_coordinates = (centroid_x_coordinate, centroid_y_coordinate)
 
-    return print(centre_coordinates)
-
-find_shape_centre(
-    coordinates=[(2.66, 4.71), (5, 3.5), (3.63, 2.52), 
-                    (4, 1.6), (1.9, 1), (0.72, 2.28)]
-                    )
+    return HttpResponse(centre_coordinates)
