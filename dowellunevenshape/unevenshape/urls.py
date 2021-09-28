@@ -1,9 +1,9 @@
 from django.urls import path
 
-from normality_a.views import index, dowellnormality
+from unevenshape.views import find_shape_centre
 
 urlpatterns = [
-    path('', index, name="index"),
-    path('normality/', dowellnormality, name="dowellnormality"),
+    # path('', index, name="index"),
+    path('', find_shape_centre, name="dowellunevenshape"),
 ]
 
