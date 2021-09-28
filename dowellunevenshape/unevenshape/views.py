@@ -1,7 +1,14 @@
+from django.contrib import messages
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import redirect, render
+
+import pandas as pd
 
 # Create your views here.
+def index(request):
+    template = "unevenshape/index.html"
+    return render(request, template)
+
 def find_shape_area(area):
     shape_area = area/2
     return shape_area
@@ -16,8 +23,12 @@ def split_coordinates(coordinates):
 
     return x_coordinates, y_coordinates
 
-def find_shape_centre(request, coordinates=[(2.66, 4.71), (5, 3.5), (3.63, 2.52), 
-                    (4, 1.6), (1.9, 1), (0.72, 2.28)]):
+def find_shape_centre(request):
+
+    coordinates_file = request.FILES['filename']
+
+    coordinates_file = pd.read_csv(coordinates_file, header=None)
+    coordinates = [(x,y) for x,y in zip(coordinates_file[0], coordinates_file[1])]
 
     coordinates = sorted(coordinates, key=lambda x: x[1])
 
