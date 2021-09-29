@@ -7,6 +7,19 @@ import pandas as pd
 # Create your views here.
 def index(request):
     template = "unevenshape/index.html"
+    # if request.method == "POST":
+    #     # access the file temporarily stored
+    #     coordinates_file = request.FILES['filename']
+
+    #     # uploading file with pandas mainatins constant time complexity
+    #     coordinates_file = pd.read_csv(coordinates_file, header=None)
+
+    #     # create a tuple of the coordinates from separate columns
+    #     coordinates = [(x,y) for x,y in zip(coordinates_file[0], coordinates_file[1])]
+    #     print(coordinates)
+
+        # return redirect('dowellunevenshape')
+
     return render(request, template)
 
 def find_shape_area(area):
@@ -29,11 +42,10 @@ def find_shape_centre(request):
     coordinates_file = request.FILES['filename']
 
     # uploading file with pandas mainatins constant time complexity
-    coordinates_file = pd.read_csv(coordinates_file, header=None)
+    coordinates_file = pd.read_csv(coordinates_file)
 
     # create a tuple of the coordinates from separate columns
-    coordinates = [(x,y) for x,y in zip(coordinates_file[0], coordinates_file[1])]
-
+    coordinates = [(x,y) for x,y in zip(coordinates_file["latitude"], coordinates_file["longitude"])]
     # sort the coordinates according to the y axis
     coordinates = sorted(coordinates, key=lambda x: x[1])
 
