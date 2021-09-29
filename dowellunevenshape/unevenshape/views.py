@@ -14,6 +14,7 @@ def find_shape_area(area):
     return shape_area
 
 def split_coordinates(coordinates):
+    # split the coordinates into x and y
     x_coordinates = list()
     y_coordinates = list()
 
@@ -24,17 +25,22 @@ def split_coordinates(coordinates):
     return x_coordinates, y_coordinates
 
 def find_shape_centre(request):
-
+    # access the file temporarily stored
     coordinates_file = request.FILES['filename']
 
+    # uploading file with pandas mainatins constant time complexity
     coordinates_file = pd.read_csv(coordinates_file, header=None)
+
+    # create a tuple of the coordinates from separate columns
     coordinates = [(x,y) for x,y in zip(coordinates_file[0], coordinates_file[1])]
 
+    # sort the coordinates according to the y axis
     coordinates = sorted(coordinates, key=lambda x: x[1])
 
     x_coordinates = split_coordinates(coordinates)[0]
     y_coordinates = split_coordinates(coordinates)[1]
 
+    # loop through coordinates to calculate area of the boundary
     shape_area = 0
 
     i = 0
@@ -58,6 +64,7 @@ def find_shape_centre(request):
 
     shape_area = find_shape_area(shape_area)
 
+    # loop through to find centroid values
     centroid_x_coordinate = 0
     centroid_y_coordinate = 0
 
@@ -80,6 +87,7 @@ def find_shape_centre(request):
     centroid_x_coordinate = centroid_x_coordinate * 1/(6 * shape_area)
     centroid_y_coordinate = centroid_y_coordinate * 1/(6 * shape_area)
 
+    # round off to the nearest 2 dp
     centroid_x_coordinate = round(centroid_x_coordinate, 2)
     centroid_y_coordinate = round(centroid_y_coordinate, 2)
 
