@@ -1,17 +1,31 @@
+import os
+
+import pandas as pd
+
 def unevenCartesian(uneven_centre, cartesian_centre):
     """
     Align the cartesian plane centre to the uneven shape centre
     """
     # find the coordinates to shift the origin
-    print("Uneven Shape Centre: {}\nCartesian Plane Centre: {}".format(uneven_centre, cartesian_centre))
-    print("\n---------------------------------------------")
-    print("---------------------------------------------\n")
+    shift_point = tuple(map(lambda i, j: i - j, uneven_centre, cartesian_centre))
 
-    new_centre = tuple(map(lambda i, j: i - j, uneven_centre, cartesian_centre))
+    coordinates = pd.read_excel(os.path.abspath("DATA.xlsx"))
+    coordinates = [(x,y) for x, y in zip(coordinates["Lat"], coordinates["Long"])]
 
-    print("Cartesian plane moves {} points".format(new_centre))
+    print("{}\n".format(coordinates[:10]))
 
-    new_centre = tuple(map(lambda i, j: i + j, new_centre, cartesian_centre))
+    print("{}\n".format("-" * 80))
+
+    # shift the coordinates within cartesian plane
+    new_coordinates = list()
+
+    for coordinate in coordinates:
+        new_coordinate = tuple(map(lambda i, j: i + j, shift_point, coordinate))
+        new_coordinates.append(new_coordinate)
+
+    print("{}\n".format(new_coordinates[:10]))
+
+    new_centre = uneven_centre
 
     return new_centre
 
