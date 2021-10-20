@@ -25,6 +25,16 @@ def unevenCartesian(uneven_centre, cartesian_centre):
 
     print("{}\n".format(new_coordinates[:10]))
 
+    print("{}\n".format("-" * 80))
+
+    # convert to dataframe and store in Excel file
+    new_coordinates = pd.DataFrame(new_coordinates)
+    new_coordinates.rename(columns={0: "Lat", 1: "Long"}, inplace=True)
+    print(new_coordinates.head())
+
+    # writer = pd.ExcelWriter("Data.xslx", engine="xlsxwriter")
+    new_coordinates.to_excel("Data.xlsx", sheet_name="ResponseData", index=False)
+
     new_centre = uneven_centre
 
     return new_centre
