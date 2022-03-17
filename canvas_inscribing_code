@@ -1,0 +1,153 @@
+#Imprting the required libraries 
+import numpy as np
+import math
+from math import sqrt
+import pandas as pd
+import itertools
+from numpy import arange
+
+#for displaying all the elements in the data frame
+pd.set_option('display.max_columns', None)
+pd.set_option('display.expand_frame_repr', False) 
+pd.set_option('max_colwidth', -1)
+pd.set_option('display.max_rows', None)
+
+radii = float(input("Input the radius of the circle : "))
+hyp= 2*radii
+height = round(radii * sqrt(3),3)
+print("Radius of circle: ",radii)
+print("Distance between centres of two circles: ", float(hyp))
+print("Half of the distance between two horizontal circles: ", height)
+
+
+#Iterations for X-coordinates
+x = input("Input the length of the canvas: ")
+
+def seq(start, length, step):
+    y = []
+    x = []
+    iterations = 10*length
+    i = 0
+    count = start
+    
+   
+    while i < (iterations+step):
+        y.append(round(count,3))
+        if i>0:
+            x.append(round(-count,3))
+        if i != iterations:
+            count += step
+        i += 1
+        if count>((length/2)+step):
+            print("Boundary limit exceeded at "+str(i)+"th iterations")
+            break
+
+    w =  list(reversed(x))
+    w.extend(y)
+
+    return w
+
+a = seq(start = 0, length = int(x), step = height)
+a
+
+print("Total no. of x co-ordinates: ",len(a))
+
+
+#Iterations for Y-coordinates
+y = input("Input the width of the canvas: ")
+
+def seq(start, width, step):
+    y = []
+    x = []
+    iterations = 10*width
+    i = 0
+    count = start
+        
+    while i < (iterations+step):
+        y.append(round(count,3))
+        if i>0:
+            x.append(round(-count,3))
+        if i != iterations:
+            count += step
+        i += 1
+        if count>(width/2):
+            print("Boundary limit exceeded at "+str(i)+"th"+" iteration")
+            break
+
+    w = list(reversed(x))        
+    w.extend(y)
+
+    return w
+
+b = seq(start = 0, width = int(y), step = radii)
+b
+
+print("Total no. of y co-ordinates: ",len(b))
+
+
+#Visualization of the code
+df = pd.DataFrame(columns=a,index=b)
+df.replace(to_replace=np.NaN,value="",inplace=True)
+df1 = df.copy()
+
+for i in b:
+    for j in a:
+        df.at[i,j]=[i,j]
+        
+df
+
+df.size
+
+#getting the odd and even indexing value of index seperating d into even indexing and odd indexing of d
+
+odd_ind = [] 
+even_ind = [] 
+for i in range(0, len(b)): 
+    if i % 2==0: 
+        even_ind.append(b[i]) 
+    else : 
+        odd_ind.append(b[i]) 
+        
+#getting the odd and even columns value of index seperating c into even columns and odd columns  of c
+odd_col = [] 
+even_col = [] 
+for i in range(0, len(a)): 
+    if i % 2==0: 
+        even_col.append(a[i]) 
+    else : 
+        odd_col.append(a[i]) 
+        
+#for placing the even columns
+for i in even_ind:
+    for j in even_col:
+        df1.at[i,j]=(j,i)
+        
+#for placing the odd columns
+for i in odd_ind:
+    for j in odd_col:
+        df1.at[i,j]=(j,i) 
+        
+df1.size
+arr = df1.to_numpy()
+len(arr)
+
+list1 = arr.tolist()
+print(f'List: {list1}')
+
+dd=[]
+for i in range(len(list1)):
+    dd.append(list(filter(lambda a: a != '', list1[i])))
+    
+len(dd)
+
+who=[]
+for i in range(len(dd)):
+     who.append(dd[i])
+
+len(who[1])
+
+#For the total number of circles
+chain_object = itertools.chain.from_iterable(dd)  
+flattened_list = list(chain_object)
+
+print("Total no. of possible circles is ",len(flattened_list))
