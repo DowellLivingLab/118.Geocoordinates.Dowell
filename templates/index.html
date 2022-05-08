@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Inscribing Function Web Application</title>
+
+<style>
+body {
+    background-color: #EEE9BF;
+    margin:50px 0px;
+    padding:120px;
+    text-align:center;
+    align:center;
+}
+div.input-form
+{
+    display: block;
+    text-align: center;
+}
+form
+{
+    display: inline-block;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: left;
+}
+h1{
+    font-family: Comic Sans MS;
+    color:#c11b17;
+     text-align: center;
+}
+h7 {
+    font-family:Minion Web;
+    color: #2c3539;
+}
+.inputs{
+    border: 2px groove red;
+    background-color: #FFF68F;
+    padding: 20px;
+    text-align: center;
+    font-family: Georgia;
+    width: 700px;
+    height: 100px;
+    border-bottom-left-radius: 25px;
+    border-bottom-right-radius: 25px;
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+}
+.container{
+    padding: 10px;
+    text-align: center;
+}
+#btn{
+    text-align: center;
+    font-size: 15px;
+    color: red ;
+}
+</style>
+</head>
+
+<body>
+    <div class="input-form">
+        <form method="POST"action = "/calculate">
+            <h1>IN-CIRCLES CALCULATOR</h1>
+            <h7><em>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This is a simple flask app that calculates the number of circles that can be inscribed in a large canvas</em></h7><br><br>
+            <div class="inputs">
+                Radius for the in-circle: <input type="text" name="radius-input"></input><br><br>
+                Length of the canvas: <input type="text" name="length-input"></input><br><br>
+                Width of the canvas: <input type="text" name="width-input"></input><br><br><br>
+            </div><br><br>
+            <div class="container">
+                <button id ="btn" type="submit"><b>CALCULATE</b></button>
+            </div>
+        </form>
+    </div>
+</body>
+
+</html>
