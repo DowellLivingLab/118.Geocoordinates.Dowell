@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Plotted Image</title>
+
+    <style>
+
+body {
+    background-color: #EEE9BF;
+    align:center;
+    font-family: Sego UI;
+    text-align:center;
+    padding: 20px;
+}
+
+img{
+        width: 800px;
+        height: 800px;
+        object-fit: cover;
+        /*display: block; /* remove extra space below image */
+    }
+
+.box{
+      width: 50%;
+      display: inline-block;
+      margin-left: auto;
+      margin-right: auto;
+      text-align: left;
+}
+</style>
+
+</head>
+
+<body>
+<h3><b style="color:#006400;"><u>Layout</u></b></h3>
+
+    <div class="box">
+      <!--<p>Plot Image</p>-->
+      <img src="data:image/png;base64, {{data.img}}" alt="Plot Image" />
+    </div>
+
+</body>
+
+</html>
