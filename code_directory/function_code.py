@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt,mpld3
 import base64
 import io
 
-def inscribe(radius,length,width):
+def inscribe(radius,length,width,layout):
 
             #hyp = 2*radius
         height = round(radius*sqrt(3),3)
@@ -141,98 +141,106 @@ def inscribe(radius,length,width):
         num = len(flattened_list)
         #print("No. of circles that can be inscribed in "+str(input_length)+"X"+str(input_width)+" canvas:",len(flattened_list))
         ts = HTML(final_df.to_html())
+        
+        layout = layout
+        img_data = ""
+        if layout == "y" :
 
-        #separating the x and y coordinates in different lists
-        xlist=[]
-        for i in dd:
-            for j in i:
-                xlist.append(j[0])
+                    #separating the x and y coordinates in different lists
+                    xlist=[]
+                    for i in dd:
+                        for j in i:
+                            xlist.append(j[0])
 
-        ylist=[]
-        for i in dd:
-            for j in i:
-                ylist.append(j[1])
-        # Enter x and y coordinates of points
-        xs = xlist
-        ys = ylist
-        x_bound = (length/2)
-        y_bound = width/2
-
-
-        # Select length of axes and the space between tick labels
-        xmin, xmax, ymin, ymax = -(x_bound+1), x_bound+1, -y_bound, y_bound
-        ticks_frequency = 1
-
-        # Open a figure
-        fig, ax = plt.subplots(figsize=(150,150))
-
-        # Draw circles with centre at (x,y) and given radius
-        for i in range(len(xs)):
-            for j in range(len(ys)):
-                if i==j:
-                    circle = plt.Circle((xs[i],ys[j]),radius,color='#00008B',linewidth=1,fill=False)
-                    ax.add_patch(circle)
-
-        # Plot the (x,y) points to mark the center of the circles
-        ax.scatter(xs, ys,c='#FF4500')
-
-        #Set the length and width of the figure
-        fig.set_figwidth(90)
-        fig.set_figheight(90)
-
-        # Set backgroung color for the figure
-        ax.set_facecolor('#f1ef8e')
-
-        # Set identical scales for both axes
-        ax.set(xlim=(xmin-1, xmax+1), ylim=(ymin-1, ymax+1), aspect='equal')
-
-        # Set bottom and left spines as x and y axes of coordinate system
-        ax.spines['bottom'].set_position('zero')
-        ax.spines['left'].set_position('zero')
-
-        # Draw lines to indicate the boundaries of the canvas
-        plt.vlines(x = max(xs), ymin = -(y_bound), ymax = y_bound, colors = 'purple',label = 'vline_multiple - full height',linestyle = 'dashed')
-        plt.vlines(x = -max(xs), ymin = -(y_bound) , ymax = y_bound, colors = 'purple',label = 'vline_multiple - full height',linestyle = 'dashed')
-        plt.hlines(y = y_bound, xmin = max(xs), xmax = -max(xs), colors = 'purple',label = 'vline_multiple - full height',linestyle = 'dashed')
-        plt.hlines(y = -(y_bound), xmin = max(xs), xmax = -max(xs), colors = 'purple',label = 'vline_multiple - full height',linestyle = 'dashed')
+                    ylist=[]
+                    for i in dd:
+                        for j in i:
+                            ylist.append(j[1])
+                    # Enter x and y coordinates of points
+                    xs = xlist
+                    ys = ylist
+                    x_bound = (length/2)
+                    y_bound = width/2
 
 
-        # Remove top and right spines
-        ax.spines['top'].set_visible(False)
-        ax.spines['right'].set_visible(False)
+                    # Select length of axes and the space between tick labels
+                    xmin, xmax, ymin, ymax = -(x_bound+1), x_bound+1, -y_bound, y_bound
+                    ticks_frequency = 1
 
-        # Create 'x','y' and 'O' labels
-        ax.set_xlabel('X', size=50, labelpad=-24, x=1.03)
-        ax.set_ylabel('Y', size=50, labelpad=-21, y=1.02, rotation=0)
-        plt.text(0.499, 0.499, r"O", ha='right', va='top',
-        transform=ax.transAxes,
-             horizontalalignment='center', fontsize=20)
+                    # Open a figure
+                    fig, ax = plt.subplots(figsize=(150,150))
 
-        # Create custom major ticks to determine position of tick labels
-        x_ticks = np.arange(xmin, xmax+1, ticks_frequency)
-        y_ticks = np.arange(ymin, ymax+1, ticks_frequency)
-        ax.set_xticks(x_ticks[x_ticks != 0])
-        ax.set_yticks(y_ticks[y_ticks != 0])
+                    # Draw circles with centre at (x,y) and given radius
+                    for i in range(len(xs)):
+                        for j in range(len(ys)):
+                            if i==j:
+                                circle = plt.Circle((xs[i],ys[j]),radius,color='#00008B',linewidth=1,fill=False)
+                                ax.add_patch(circle)
 
-        # Create minor ticks placed at each integer to enable drawing of minor grid
-        ax.set_xticks(np.arange(xmin, xmax+1), minor=True)
-        ax.set_yticks(np.arange(ymin, ymax+1), minor=True)
+                    # Plot the (x,y) points to mark the center of the circles
+                    ax.scatter(xs, ys,c='#FF4500')
 
-        # Draw major and minor grid lines
-        ax.grid(which='both', color='grey', linewidth=1, linestyle='-', alpha=0.2)
+                    #Set the length and width of the figure
+                    fig.set_figwidth(90)
+                    fig.set_figheight(90)
 
-        # Draw arrows
-        arrow_fmt = dict(markersize=4, color='black', clip_on=False)
-        ax.plot((1), (0), marker='>', transform=ax.get_yaxis_transform(), **arrow_fmt)
-        ax.plot((0), (1), marker='^', transform=ax.get_xaxis_transform(), **arrow_fmt)
+                    # Set backgroung color for the figure
+                    ax.set_facecolor('#f1ef8e')
 
-        plt.title("IN-CIRCLES PLOTTED IN A CARTESIAN PLANE",fontsize=25,y=-0.02)
+                    # Set identical scales for both axes
+                    ax.set(xlim=(xmin-1, xmax+1), ylim=(ymin-1, ymax+1), aspect='equal')
 
-        #plt.show()
-        sio = io.BytesIO()
-        fig.savefig(sio)
-        sio.seek(0)
-        img_data = base64.b64encode(sio.read()).decode('ascii')
+                    # Set bottom and left spines as x and y axes of coordinate system
+                    ax.spines['bottom'].set_position('zero')
+                    ax.spines['left'].set_position('zero')
+
+                    # Draw lines to indicate the boundaries of the canvas
+                    plt.vlines(x = max(xs), ymin = -(y_bound), ymax = y_bound, colors = 'purple',label = 'vline_multiple - full height',linestyle = 'dashed')
+                    plt.vlines(x = -max(xs), ymin = -(y_bound) , ymax = y_bound, colors = 'purple',label = 'vline_multiple - full height',linestyle = 'dashed')
+                    plt.hlines(y = y_bound, xmin = max(xs), xmax = -max(xs), colors = 'purple',label = 'vline_multiple - full height',linestyle = 'dashed')
+                    plt.hlines(y = -(y_bound), xmin = max(xs), xmax = -max(xs), colors = 'purple',label = 'vline_multiple - full height',linestyle = 'dashed')
+
+
+                    # Remove top and right spines
+                    ax.spines['top'].set_visible(False)
+                    ax.spines['right'].set_visible(False)
+
+                    # Create 'x','y' and 'O' labels
+                    ax.set_xlabel('X', size=50, labelpad=-24, x=1.03)
+                    ax.set_ylabel('Y', size=50, labelpad=-21, y=1.02, rotation=0)
+                    plt.text(0.499, 0.499, r"O", ha='right', va='top',
+                    transform=ax.transAxes,
+                         horizontalalignment='center', fontsize=20)
+
+                    # Create custom major ticks to determine position of tick labels
+                    x_ticks = np.arange(xmin, xmax+1, ticks_frequency)
+                    y_ticks = np.arange(ymin, ymax+1, ticks_frequency)
+                    ax.set_xticks(x_ticks[x_ticks != 0])
+                    ax.set_yticks(y_ticks[y_ticks != 0])
+
+                    # Create minor ticks placed at each integer to enable drawing of minor grid
+                    ax.set_xticks(np.arange(xmin, xmax+1), minor=True)
+                    ax.set_yticks(np.arange(ymin, ymax+1), minor=True)
+
+                    # Draw major and minor grid lines
+                    ax.grid(which='both', color='grey', linewidth=1, linestyle='-', alpha=0.2)
+
+                    # Draw arrows
+                    arrow_fmt = dict(markersize=4, color='black', clip_on=False)
+                    ax.plot((1), (0), marker='>', transform=ax.get_yaxis_transform(), **arrow_fmt)
+                    ax.plot((0), (1), marker='^', transform=ax.get_xaxis_transform(), **arrow_fmt)
+
+                    plt.title("IN-CIRCLES PLOTTED IN A CARTESIAN PLANE",fontsize=25,y=-0.02)
+
+                    #plt.show()
+                    sio = io.BytesIO()
+                    fig.savefig(sio)
+                    sio.seek(0)
+                    img_data = base64.b64encode(sio.read()).decode('ascii')
+        elif layout == "n" :
+            print("Layout not required")
+        else:
+            print("You can enter either y or n")
 
         #graph = mpld3.display(fig=None, closefig=True, local=False)
         return img_data,ts,num
