@@ -30,19 +30,20 @@ def plot():
         rad = float(request.form.get('radius-input'))
         len = int(request.form.get('length-input'))
         wid = int(request.form.get('width-input'))
+        layout = str(request.form.get('layout-input'))
+        print("layout: ", layout)
         #calling the inscribe function
-        data = inscribe(rad,len,wid)
-        #output = {'plot':data[0],'ylist':data[1],'js':data[2],'num':data[3]}
-        #output = {'plot': data[0], 'ylist': data[1], 'js': data[2], 'num': data[3], 'img': data[4]}
+        data = inscribe(rad,len,wid,layout)
         output = {'img': data[0]}
         inp = {'radius':rad,'length':len,'width':wid}
+        elif layout.lower() == "n":
+            print("Layout not required")
+        else:
+            print("Enter either y or n")
 
-        return render_template('plot_page.html',data=output,inp=inp)
-    return render_template('index.html')
-
+    #return render_template('index.html')
 
 if __name__ == '__main__':
-    #inscribe(radius = input_radius, length = input_length, width = input_width)
     app.run()
 
 
