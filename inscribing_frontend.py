@@ -33,9 +33,13 @@ def plot():
         layout = str(request.form.get('layout-input'))
         print("layout: ", layout)
         #calling the inscribe function
-        data = inscribe(rad,len,wid,layout)
-        output = {'img': data[0]}
-        inp = {'radius':rad,'length':len,'width':wid}
+        if layout.lower() == "y":
+            data = inscribe(rad,len,wid,layout)
+            #output = {'plot':data[0],'ylist':data[1],'js':data[2],'num':data[3]}
+            #output = {'plot': data[0], 'ylist': data[1], 'js': data[2], 'num': data[3], 'img': data[4]}
+            output = {'img': data[0]}
+            inp = {'radius':rad,'length':len,'width':wid}
+            return render_template('plot_page.html', data=output, inp=inp)
         elif layout.lower() == "n":
             print("Layout not required")
         else:
