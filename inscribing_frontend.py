@@ -16,8 +16,9 @@ def calculate():
         rad = float(request.form.get('radius-input'))
         len = int(request.form.get('length-input'))
         wid = int(request.form.get('width-input'))
+        layout = str(request.form.get('layout-input'))
         #calling the inscribe function
-        data = inscribe(rad,len,wid)
+        data = inscribe(rad,len,wid,layout)
         output = {'image':data[0],'table':data[1],'num':data[2]}
         inp = {'radius':rad,'length':len,'width':wid}
 
