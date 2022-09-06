@@ -1,161 +1,87 @@
 import numpy as np
-import math
 from math import sqrt
 import pandas as pd
-import itertools
 from IPython.display import HTML
-import matplotlib.pyplot as plt,mpld3
+import matplotlib.pyplot as plt
 import base64
 import io
 
-def inscribe(radius,length,width,layout):
+import ctypes
+import glob
 
-            #hyp = 2*radius
+def inscribe(radius,length,width,layout):
+        # print("Successfull 0\n")
+
+        # find the shared library, the path depends on the platform and Python version
+        libfile = glob.glob('build/*/algorithm*.so')[0]
+        # print("Successfull 1\n")
+
+        # 1. open the shared library
+        mylib = ctypes.CDLL(libfile)
+
+        mylib.inscribe.restype = ctypes.POINTER(ctypes.c_double)
+        mylib.inscribe.argtypes = [ctypes.c_float, ctypes.c_int, ctypes.c_int]
+
+        result = mylib.inscribe(radius, length, width)
+        # print("Successfull 2\n")
         height = round(radius*sqrt(3),3)
 
-                #iterations for x coordinates
+        mylib.seq1Count.restype = ctypes.POINTER(ctypes.c_float)
+        mylib.seq1Count.argtypes = [ctypes.c_float, ctypes.c_int, ctypes.c_float]
+        mylib.seq2Count.restype = ctypes.POINTER(ctypes.c_float)
+        mylib.seq2Count.argtypes = [ctypes.c_float, ctypes.c_int, ctypes.c_float]
 
-        def seq1(start,length,step):
-                y = []
-                x = []
-                iterations = int(10*length)
-                i = 0
-                count = start
+        a = mylib.seq1Count(0.0,length,height)
+        b = mylib.seq2Count(0.0,width,radius)
 
+        print("Getting Points from C++ Done\n")
 
-                while i < iterations:
-                    y.append(round(count,3))
-                    if i>0:
-                        x.append(round(-count,3))
-                    if i != iterations:
-                        count += step
-                    i += 1
-                    if count>((length/2)+step):
-                        print("Boundary limit for X exceeded at "+str(i)+"th iterations")
-                        break
+        aList = []
+        bList = []
+        print("a = ", a[0])
+        print("b = ", b[0])
+        for i in range (1,int(a[0]) + 1):
+            aList.append(round(a[i],3))
+        for i in range (1, int(b[0]) + 1):
+            bList.append(round(b[i],3))
 
-                w =  list(reversed(x))
-                w.extend(y)
+        print("Converting of a and b into List Done\n")
 
-                x_num = len(w)
-
-                print("Total no. of X-coordinates: ",x_num)
-
-                return w
-
-        a = seq1(start = 0, length = length, step = height)
+        # print(aList)
+        # print(bList)
 
 
-            #iterations for y coordinates
+        final_df = pd.DataFrame(columns=aList,index=bList)
+        final_df.replace(to_replace=np.NaN,value="",inplace=True)
 
-        def seq2(start, width, step):
-                y = []
-                x = []
-                iterations = 10*width
-                i = 0
-                count = start
+        print("DataFrame columns and index set\n")
 
-                while i < iterations:
-                    y.append(round(count,3))
-                    if i>0:
-                        x.append(round(-count,3))
-                    if i != iterations:
-                        count += step
-                    i += 1
-                    if count>(width/2):
-                        #print("Boundary limit for Y exceeded at "+str(i)+"th"+" iteration")
-                        break
+        # print(final_df)
+        # print("\nPrinting\n")
+        # for i in range(1, ( (2 * (int(result[0]))) + 1 )):
+        #     print(round(result[i], 3))
+        for i in range(1, ( (2 * (int(result[0]))) + 1 ), 2):
+            final_df.at[round(result[i+1], 3), round(result[i], 3)] = [round(result[i+1], 3), round(result[i],3)]
 
-                w = list(reversed(y))
-                w.extend(x)
-
-                y_num = len(w)
-                print("Total no. of Y-coordinates: ",y_num)
-
-                return w
-
-        b = seq2(start = 0, width = width, step = radius)
-
-
-            #preparing the dataframe of the coordinates
-
-        df = pd.DataFrame(columns=a,index=b)
-        df.replace(to_replace=np.NaN,value="",inplace=True)
-        df1 = df.copy() #changes in df1 will not effect in df
-
-
-            #getting the odd and even indexing value of index seperating b into even indexing and odd indexing of b
-
-        for i in b:
-            for j in a:
-                df.at[i,j]=[i,j]
-
-        odd_ind = []
-        even_ind = []
-        for i in range(0, len(b)):
-            if i % 2==0:
-                even_ind.append(b[i])
-            else :
-                odd_ind.append(b[i])
-
-
-            #getting the odd and even columns value of index seperating a into even columns and odd columns  of a
-
-        odd_col = []
-        even_col = []
-        for i in range(0, len(a)):
-            if i % 2==0:
-                   even_col.append(a[i])
-            else :
-                odd_col.append(a[i])
-
-
-            # for placing the even columns
-
-        for i in even_ind:
-            for j in even_col:
-                df1.at[i,j]=(j,i)
-
-            # for placing the odd columns
-
-        for i in odd_ind:
-            for j in odd_col:
-                df1.at[i,j]=(j,i)
-
-
-            #counting the number of circles
-        final_df = df1
-        arr = df1.to_numpy()
-        list1 = arr.tolist()
-
-        dd=[]
-        for i in range(len(list1)):
-            dd.append(list(filter(lambda a: a != '', list1[i])))
-
-        who=[]
-        for i in range(len(dd)):
-             who.append(dd[i])
-
-        chain_object = itertools.chain.from_iterable(dd)
-        flattened_list = list(chain_object)
-        num = len(flattened_list)
+        print("DataFrame all points inserted\n")
+        # print(final_df)
         #print("No. of circles that can be inscribed in "+str(input_length)+"X"+str(input_width)+" canvas:",len(flattened_list))
         ts = HTML(final_df.to_html())
-        
+
+        print("HTML conversion DONE\n")
+
         layout = layout
         img_data = ""
         if layout == "y" :
 
                     #separating the x and y coordinates in different lists
                     xlist=[]
-                    for i in dd:
-                        for j in i:
-                            xlist.append(j[0])
+                    for i in range(1, ( (2 * (int(result[0]))) + 1 ), 2):
+                        xlist.append(result[i])
 
                     ylist=[]
-                    for i in dd:
-                        for j in i:
-                            ylist.append(j[1])
+                    for i in range(2, ( (2 * (int(result[0]))) + 1 ), 2):
+                        ylist.append(result[i])
                     # Enter x and y coordinates of points
                     xs = xlist
                     ys = ylist
@@ -243,4 +169,4 @@ def inscribe(radius,length,width,layout):
             print("You can enter either y or n")
 
         #graph = mpld3.display(fig=None, closefig=True, local=False)
-        return img_data,ts,num
+        return img_data,ts,int(result[0])
