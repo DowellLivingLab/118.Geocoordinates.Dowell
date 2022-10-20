@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
 from django.http import JsonResponse
-import requests
+import json
 import ctypes
 import glob
 
@@ -10,7 +10,7 @@ def inscribingFunction(inscribingInput):
     radius = inscribingInput['radius']
     length = inscribingInput['length']
     width = inscribingInput['width']
-    libfile = glob.glob('build/*/algorithm*.so')[0]
+    libfile = glob.glob('/home/100071/118.Geocoordinates.Dowell/Inscribing_API/API//build/*/algorithm*.so')[0]
     mylib = ctypes.CDLL(libfile)
     mylib.inscribe.restype = ctypes.c_int
     mylib.inscribe.argtypes = [ctypes.c_float, ctypes.c_int, ctypes.c_int]
@@ -21,12 +21,12 @@ def inscribingFunction(inscribingInput):
     return inscribingOutput
 
 def index(request):
-    return render(request, 'index.html') 
+    return render(request, 'index.html')
 
 @csrf_exempt
 def functionInputs(request):
     if request.method == 'POST':
-        radius=int(request.POST['radius'])
+        radius=float(request.POST['radius'])
         length=int(request.POST['length'])
         width=int(request.POST['width'])
         inscribingInput = {
