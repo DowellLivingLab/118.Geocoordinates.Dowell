@@ -3,20 +3,22 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
 from django.http import JsonResponse
 import json
-import ctypes
-import glob
+import sys
+sys.path.insert(0, '/home/100071/Inscribing_API/build')
+import geocoordinates
 
 def inscribingFunction(inscribingInput):
     radius = inscribingInput['radius']
     length = inscribingInput['length']
     width = inscribingInput['width']
-    libfile = glob.glob('/home/100071/118.Geocoordinates.Dowell/Inscribing_API/API//build/*/algorithm*.so')[0]
-    mylib = ctypes.CDLL(libfile)
-    mylib.inscribe.restype = ctypes.c_int
-    mylib.inscribe.argtypes = [ctypes.c_float, ctypes.c_int, ctypes.c_int]
-    numberOfCircles = mylib.inscribe(radius, length, width)
+    points = geocoordinates.inscribe(radius, length, width)
+    coordinates = []
+    for point in points:
+        coordinates.append([point.x, point.y])
+    numberOfCircles = len(coordinates)
     inscribingOutput = {
         'numberOfCircles':numberOfCircles,
+        'coordinates':coordinates,
     }
     return inscribingOutput
 
