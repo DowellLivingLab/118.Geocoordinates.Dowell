@@ -1,39 +1,41 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Inscribing Function Web App</title>
     <style>
-    body {
-        background-color: #EEE9BF;
-        align:center;
-        font-family: Sego UI;
-    }
+        body {
+            background-color: #EEE9BF;
+            align: center;
+            font-family: Sego UI;
+        }
 
-    .container{
-        padding:10px;
-    }
+        .container {
+            padding: 10px;
+        }
     </style>
 </head>
 
 <body>
     <h3><b style="color:#006400;"><u>Inputs</u></b></h3>
-    Radius: &nbsp;{{inp.radius}},&nbsp;&nbsp;
-    Length: &nbsp; {{inp.length}}, &nbsp;&nbsp;
-    Width: &nbsp; {{inp.width}} &nbsp;&nbsp;
+    Radius: &nbsp;{{inscribingInput.radius}},&nbsp;&nbsp;
+    Length: &nbsp; {{inscribingInput.length}}, &nbsp;&nbsp;
+    Width: &nbsp; {{inscribingInput.width}} &nbsp;&nbsp;
     <br>
 
     <h3><b style="color:#006400;"><u>Output</u></b></h3>
-    Number of circles that can fit inside the canvas: <u style="color:red; font-weight:bold;">&nbsp;{{data.num}}</u>
+    Number of circles that can fit inside the canvas: <u
+        style="color:red; font-weight:bold;">&nbsp;{{numberOfCircles}}</u>
     <br><br>
 
-    <h3><b style="color:#006400;"><u>Co-ordinates of the circles (with origin at the center of the canvas)</u></b></h3><br>
-    <table>
-        <tbody>
-            {{data.table}}
-        </tbody>
-    </table><br>
+    <h3><b style="color:#006400;"><u>Co-ordinates of the circles (with origin at the center of the canvas)</u></b></h3>
+    <br>
+    {% autoescape off %}
+    {{table}}
+    {% endautoescape %}
+    <br>
 
-    <form method="POST" action="/plot" target="_blank">
+    <!-- <form method="POST" action="/plot" target="_blank">
         <div class="inputs" hidden>
             Radius for the in-circle: <input type="text" name="radius-input" value="{{inp.radius}}"></input><br><br>
             Length of the canvas: <input type="text" name="length-input" value="{{inp.length}}"></input><br><br>
@@ -41,7 +43,7 @@
         </div>
         <b>View layout: <input type="text" name="layout-input"></input></b>
         <button id="btn" type="submit" class="container"><b>submit</b></button>
-    </form>
+    </form> -->
 
 </body>
 
