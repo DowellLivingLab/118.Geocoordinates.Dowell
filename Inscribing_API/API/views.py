@@ -4,14 +4,16 @@ from django.http import HttpResponse
 from django.http import JsonResponse
 import json
 import sys
-sys.path.insert(0, '/home/100071/Inscribing_API/build')
+sys.path.insert(0, '/home/anonymous/Desktop/Inscribing/Inscribing_API/build')
 import geocoordinates
+import table
 
 def inscribingFunction(inscribingInput):
     radius = inscribingInput['radius']
     length = inscribingInput['length']
     width = inscribingInput['width']
     points = geocoordinates.inscribe(radius, length, width)
+    htmlTable = table.Table(points)
     coordinates = []
     for point in points:
         coordinates.append([point.x, point.y])
@@ -19,6 +21,7 @@ def inscribingFunction(inscribingInput):
     inscribingOutput = {
         'numberOfCircles':numberOfCircles,
         'coordinates':coordinates,
+        'table':f'<table border = "2"><tbody>{htmlTable}</tbody></table>',
     }
     return inscribingOutput
 
@@ -37,7 +40,8 @@ def functionInputs(request):
             'width':width,
         }
         inscribingOutput = inscribingFunction(inscribingInput)
-        return JsonResponse(inscribingOutput)
+        inscribingOutput['inscribingInput']=inscribingInput
+        return render(request,'output_page.html',inscribingOutput)
     else:
         return HttpResponse("Method Not Allowed")
 
