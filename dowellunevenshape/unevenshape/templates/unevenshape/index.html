@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<p>Please ensure the file has latitude and longitude on the first and second column respectively. Don't include a header!</p>
+<p>Upload your CSV file:</p>
+
+<form action="/dowellunevenshape/", method="POST", enctype="multipart/form-data">
+    {% csrf_token %}
+  <input type="file" id="id_docfile" name="filename">
+  <input type="submit">
+</form>
+
+</body>
+</html>

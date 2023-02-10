@@ -1,1 +1,43 @@
 Logic to be written here
+
+import libraries
+
+set defaults to be used throughout the script
+
+user to input length, width, N which is the total number of circles inscribed in the rectangle, radius as radi, central_lat, central_long, x, y
+calculate the area, area of circle, radius, diameter, hyp, heigh from user input
+
+area_of_circle = area/N
+radius = math.sqrt(area_of_circle/3.142)
+diameter = 2 * radius
+
+hyp = 2 * radi
+heigh = radi * squareroot(3)
+round heigh to the nearest 10
+
+number of iterations for x axis
+    create seq function with parameters start, iteration and step
+    iterate through to create a list
+    return list
+
+number of iterations for y axis
+    create seq function with parameters start, iteration and step
+    iterate through to create a list
+    return list
+
+add central_long to each coordinate of x axis
+    loop through results of seq for x axis
+    return appended list from loop
+
+add central_lat to each coordinate of y axis
+    loop through results of seq for y axis
+    return appended list from loop
+
+dataframe
+    create dataframe with columns as appended list from loop (central_long) and index as appended list from loop (central_lat)
+    replace null values with empty string
+    perform value placing
+    get the odd and even indexing values for both longitude and latitude
+    value place the odd and even columns for both longitude and latitude
+    convert a copy of the dataframe to an array
+    store the array elements in a list where the results from seq of x axis is not empty
