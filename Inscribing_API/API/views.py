@@ -47,3 +47,27 @@ def inscribingAPI(request):
         return JsonResponse (inscribingOutput)
     else:
         return HttpResponse("Method Not Allowed")
+
+@csrf_exempt
+def publicAPI(request):
+    if (request.method=="POST"):
+        inscribingInput=json.loads(request.body)
+        if "api_key" in inscribingInput:
+            api_key = inscribingInput.get('api_key')
+            data = processApikey(api_key)
+            api_resp = json.loads(data)
+            if api_resp['success'] is True:
+                credit_count = api_resp['total_credits']
+                if credit_count>=0:
+                    inscribingOutput=inscribingFunction(inscribingInput)
+                    return JsonResponse(inscribingOutput)
+                else:
+                    JsonResponse({"success":api_resp['success'], "message":api_resp['message'], "total credits":api_resp['total_credits']},status=status.HTTP_400_BAD_REQUEST)
+            elif api_resp['success'] is False:
+                return JsonResponse({"sucesss":False, "message":api_resp['message'], "total credits":api_resp['total_credits']},status=status.HTTP_200_OK)
+
+        else:
+            return JsonResponse({"success":False, "msg":"Provide a valid API key"},status=status.HTTP_403_FORBIDDEN)
+
+    else:
+        return HttpResponse("Method Not Allowed")
